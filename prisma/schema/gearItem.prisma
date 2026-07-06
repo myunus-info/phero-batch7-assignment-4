@@ -1,0 +1,33 @@
+enum GearCondition {
+  NEW
+  GOOD
+  FAIR
+  WORN
+}
+
+model GearItem {
+  id                 String        @id @default(uuid())
+  providerId         String
+  categoryId         String
+  name               String
+  description        String?
+  brand              String?
+  pricePerDay        Decimal       @db.Decimal(10, 2)
+  depositAmount      Decimal?      @db.Decimal(10, 2)
+  quantityTotal      Int
+  quantityAvailable  Int
+  condition          GearCondition?
+  images             String[]      @default([])
+  isActive           Boolean       @default(true)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  provider  User               @relation("ProviderGear", fields: [providerId], references: [id], onDelete: Cascade)
+  category  Category           @relation(fields: [categoryId], references: [id])
+  orderItems RentalOrderItem[]
+  reviews    Review[]
+
+  @@index([categoryId])
+  @@index([providerId])
+  @@map("gear_items")
+}
