@@ -1,8 +1,3 @@
-// import { z } from 'zod';
-// import { userValidations } from './user.validation';
-
-// export type TRegisterUserInput = z.infer<typeof userValidations.registerUserValidationSchema>;
-
 export interface RegisterInput {
   name: string;
   email: string;
