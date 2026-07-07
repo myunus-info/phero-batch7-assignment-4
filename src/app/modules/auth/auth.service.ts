@@ -1,4 +1,3 @@
-import { compare } from 'bcryptjs';
 import { JwtPayload, SignOptions } from 'jsonwebtoken';
 import { ILoginUser } from './auth.interface';
 import { prisma } from '../../../lib/prisma';
