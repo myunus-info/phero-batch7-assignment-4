@@ -5,6 +5,7 @@ import config from './config';
 import cookieParser from 'cookie-parser';
 import { notFoundHandler } from './app/middleware/notFoundHandler';
 import { errorHandler } from './app/middleware/errorHandler';
+import router from './app/routes';
 
 const app: Application = express();
 
@@ -23,6 +24,8 @@ app.use(morgan(config.env === 'production' ? 'combined' : 'dev'));
 app.get('/', (req: Request, res: Response) => {
   res.status(200).json({ status: 'ok', service: 'gearup-api' });
 });
+
+app.use('/api/v1', router);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
