@@ -1,3 +1,6 @@
+import { z } from 'zod';
+import { UserStatusEnum } from './user.validation';
+
 export interface RegisterInput {
   name: string;
   email: string;
@@ -19,3 +22,5 @@ export interface RegisterProviderInput extends Omit<RegisterInput, 'role' | 'sho
 }
 
 export type TRegisterUserInput = RegisterCustomerInput | RegisterProviderInput;
+
+export type TUserStatus = z.infer<typeof UserStatusEnum>;

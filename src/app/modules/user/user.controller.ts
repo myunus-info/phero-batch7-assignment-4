@@ -27,7 +27,33 @@ const getMe = catchAsync(async (req: Request, res: Response, next: NextFunction)
   });
 });
 
+const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const users = await userService.getUsersFromDB();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Users retrieved successfully',
+    data: users,
+  });
+});
+
+const updateUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const { status } = req.body;
+  const { id } = req.params;
+  const updated = await userService.updateUserStatusIntoDB(status, id as string);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User status updated successfully',
+    data: updated,
+  });
+});
+
 export const userController = {
   registerUser,
   getMe,
+  getAllUsers,
+  updateUser,
 };
