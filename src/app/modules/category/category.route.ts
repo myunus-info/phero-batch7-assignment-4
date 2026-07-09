@@ -10,8 +10,8 @@ const router = Router();
 router
   .route('/')
   .post(
-    validateRequest(categoryValidations.createCategoryValidationSchema),
     auth(Role.PROVIDER),
+    validateRequest(categoryValidations.createCategoryValidationSchema),
     categoryController.createCategory,
   )
   .get(auth(Role.PROVIDER), categoryController.getCategories);
