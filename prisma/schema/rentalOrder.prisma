@@ -1,7 +1,6 @@
 enum RentalStatus {
   PLACED
   CONFIRMED
-  PAID
   PICKED_UP
   RETURNED
   CANCELLED

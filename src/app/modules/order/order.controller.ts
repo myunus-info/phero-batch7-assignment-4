@@ -5,7 +5,8 @@ import httpStatus from 'http-status';
 import { orderService } from './order.service';
 
 const createRentalOrder = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const newOrder = await orderService.createRentalOrerIntoDB(req.body, req.user?.id!);
+  const customerId = req.user?.id!;
+  const newOrder = await orderService.createRentalOrerIntoDB(req.body, customerId);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,

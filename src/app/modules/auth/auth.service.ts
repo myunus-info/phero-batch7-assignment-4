@@ -52,7 +52,6 @@ const refreshToken = async (refreshToken: string) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid credentials!');
   }
 
-  console.log({ verifiedRefreshToken });
   const { id } = verifiedRefreshToken.data as JwtPayload;
 
   const user = await prisma.user.findUniqueOrThrow({ where: { id } });

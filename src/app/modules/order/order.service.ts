@@ -1,5 +1,6 @@
 import { prisma } from '../../../lib/prisma';
 import ApiError from '../../errors/ApiError';
+import { paymentService } from '../payment/payment.service';
 import { TRentalOrder, TRentalOrderItem } from './order.interface';
 import httpStatus from 'http-status';
 
@@ -9,9 +10,8 @@ function daysBetween(start: Date, end: Date): number {
 }
 
 const createRentalOrerIntoDB = async (payload: TRentalOrder, customerId: string) => {
-  const numDays = daysBetween(payload.startDate, payload.endDate);
-
-  const order = await prisma.$transaction(async txt => {
+  const numDays = daysBetween(new Date(payload.startDate), new Date(payload.endDate));
+  const rentalOrder = await prisma.$transaction(async txt => {
     const gearIds = payload.items?.map(i => i.gearItemId);
     const gearItems = await txt.gearItem.findMany({ where: { id: { in: gearIds } } });
 
@@ -51,19 +51,44 @@ const createRentalOrerIntoDB = async (payload: TRentalOrder, customerId: string)
       });
     }
 
-    return await txt.rentalOrder.create({
+    const order = await txt.rentalOrder.create({
       data: {
         customerId,
-        startDate: payload.startDate,
-        endDate: payload.endDate,
+        startDate: new Date(payload.startDate),
+        endDate: new Date(payload.endDate),
         totalAmount,
         items: { create: orderItemsData },
       },
       include: { items: { include: { gearItem: true } } },
     });
+
+    const user = await txt.user.findUniqueOrThrow({
+      where: { id: customerId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        address: true,
+      },
+    });
+
+    const paymentUrl = await paymentService.initiatePayment(user, order);
+
+    await txt.payment.create({
+      data: {
+        amount: order.totalAmount,
+        rentalOrderId: order.id,
+      },
+    });
+
+    return {
+      order,
+      paymentUrl,
+    };
   });
 
-  return order;
+  return rentalOrder;
 };
 
 const getMyRentalOrdersFromDB = async (customerId: string) => {
