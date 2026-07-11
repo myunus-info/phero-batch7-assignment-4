@@ -13,7 +13,7 @@ const getAllGears = catchAsync(async (req: Request, res: Response, next: NextFun
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Gears retrieved successfully',
+    message: 'Gear items retrieved successfully',
     meta: result.meta,
     data: result.data,
   });
@@ -27,7 +27,7 @@ const getGearById = catchAsync(async (req: Request, res: Response, next: NextFun
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Gear retrieved successfully',
+    message: 'Gear item retrieved successfully',
     data: gear,
   });
 });
