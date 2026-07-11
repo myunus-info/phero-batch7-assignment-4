@@ -1,8 +1,13 @@
-const getAllGears = async () => {};
+import { prisma } from '../../../lib/prisma';
 
-const getGearById = async (gearId: string) => {};
+const getAllGearsFromDB = async () => {
+  const gears = await prisma.gearItem.findMany();
+  return gears;
+};
+
+const getGearByIdFromDB = async (gearId: string) => {};
 
 export const gearService = {
-  getAllGears,
-  getGearById,
+  getAllGearsFromDB,
+  getGearByIdFromDB,
 };
