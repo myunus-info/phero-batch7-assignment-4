@@ -53,17 +53,7 @@ const registerUserValidationSchema = z.object({
     }),
 });
 
-const userStatusUpdateSchema = z.object({
-  body: z.object({
-    status: UserStatusEnum,
-  }),
-});
-
-export const userValidations = {
-  registerUserValidationSchema,
-  userStatusUpdateSchema,
-};
-
 export const authValidations = {
+  registerUserValidationSchema,
   loginUserValidationSchema,
 };
