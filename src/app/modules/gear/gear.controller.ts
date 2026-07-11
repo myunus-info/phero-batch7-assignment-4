@@ -3,15 +3,19 @@ import catchAsync from '../../../utils/catchAsync';
 import { sendResponse } from '../../../utils/sendResponse';
 import httpStatus from 'http-status';
 import { gearService } from './gear.service';
+import pick from '../../../shared/shared';
 
 const getAllGears = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const gears = await gearService.getAllGearsFromDB();
+  const filters = pick(req.query, ['category', 'price', 'brand', 'page', 'limit']);
+
+  const result = await gearService.getAllGearsFromDB(filters);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Gears retrieved successfully',
-    data: gears,
+    meta: result.meta,
+    data: result.data,
   });
 });
 
