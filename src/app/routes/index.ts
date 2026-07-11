@@ -6,6 +6,7 @@ import { providerRoutes } from '../modules/provider/provider.route';
 import { orderRoutes } from '../modules/order/order.route';
 import { paymentRoutes } from '../modules/payment/payment.route';
 import { reviewRoutes } from '../modules/review/review.route';
+import { gearRoutes } from '../modules/gear/gear.route';
 
 const router = Router();
 
@@ -21,6 +22,10 @@ const moduleRoutes = [
   {
     path: '/categories',
     route: categoryRoutes,
+  },
+  {
+    path: '/gears',
+    route: gearRoutes,
   },
   {
     path: '/provider',
