@@ -7,15 +7,13 @@ import { Role } from '../../../../generated/prisma/enums';
 
 const router = Router();
 
+router.use(auth(Role.CUSTOMER));
+
 router
   .route('/')
-  .post(
-    validateRequest(orderValidation.createRentalOrderValidationSchema),
-    auth(Role.CUSTOMER),
-    orderController.createRentalOrder,
-  )
-  .get(auth(Role.CUSTOMER), orderController.getMyRentalOrders);
+  .post(validateRequest(orderValidation.createRentalOrderValidationSchema), orderController.createRentalOrder)
+  .get(orderController.getMyRentalOrders);
 
-router.get('/:id', auth(Role.CUSTOMER), orderController.getRentalOrderByOrderId);
+router.get('/:id', orderController.getRentalOrderByOrderId);
 
 export const orderRoutes = router;
