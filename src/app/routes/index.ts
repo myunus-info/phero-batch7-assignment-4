@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { authRoutes } from '../modules/auth/auth.route';
 import { userRoutes } from '../modules/user/user.route';
 import { categoryRoutes } from '../modules/category/category.route';
-import { gearRoutes } from '../modules/gear/gear.route';
+import { providerRoutes } from '../modules/provider/provider.route';
 import { orderRoutes } from '../modules/order/order.route';
 import { paymentRoutes } from '../modules/payment/payment.route';
 
@@ -22,8 +22,8 @@ const moduleRoutes = [
     route: categoryRoutes,
   },
   {
-    path: '/gears',
-    route: gearRoutes,
+    path: '/provider',
+    route: providerRoutes,
   },
   {
     path: '/rentals',

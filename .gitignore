@@ -2,6 +2,7 @@ node_modules
 dist
 .env
 .git
+.kilo
 generated/
 .env.local
 .env.*.local
