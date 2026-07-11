@@ -15,11 +15,4 @@ router.get(
   userController.updateUser,
 );
 
-router.post(
-  '/register',
-  validateRequest(userValidations.registerUserValidationSchema),
-  userController.registerUser,
-);
-router.get('/me', userController.getMe);
-
 export const userRoutes = router;
