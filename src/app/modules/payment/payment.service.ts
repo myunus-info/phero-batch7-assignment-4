@@ -41,7 +41,21 @@ const confirmPayment = async (data: TPaymentConfirmData) => {
   return response;
 };
 
+const getMyPaymentsFromDB = async (customerId: string) => {
+  const payments = await prisma.payment.findMany({
+    where: { rentalOrder: { customerId } },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  if (!payments || payments.length === 0) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'No payment found!');
+  }
+
+  return payments;
+};
+
 export const paymentService = {
   initiatePayment,
   confirmPayment,
+  getMyPaymentsFromDB,
 };

@@ -1,7 +1,7 @@
 import { prisma } from '../../../lib/prisma';
 import ApiError from '../../errors/ApiError';
 import { paymentService } from '../payment/payment.service';
-import { TRentalOrder, TRentalOrderItem } from './order.interface';
+import { TRentalOrder } from './order.interface';
 import httpStatus from 'http-status';
 
 function daysBetween(start: Date, end: Date): number {
