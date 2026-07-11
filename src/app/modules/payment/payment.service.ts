@@ -54,8 +54,19 @@ const getMyPaymentsFromDB = async (customerId: string) => {
   return payments;
 };
 
+const getPaymentById = async (paymentId: string) => {
+  const payment = await prisma.payment.findUnique({ where: { id: paymentId } });
+
+  if (!payment) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'No payment found!');
+  }
+
+  return payment;
+};
+
 export const paymentService = {
   initiatePayment,
   confirmPayment,
   getMyPaymentsFromDB,
+  getPaymentById,
 };

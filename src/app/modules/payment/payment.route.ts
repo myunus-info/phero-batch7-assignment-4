@@ -9,4 +9,6 @@ router.use(auth(Role.CUSTOMER));
 
 router.route('/').post(paymentController.confirmPayment).get(paymentController.getMyPayments);
 
+router.get('/:id', paymentController.getPaymentById);
+
 export const paymentRoutes = router;
