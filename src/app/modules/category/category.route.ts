@@ -14,6 +14,6 @@ router
     validateRequest(categoryValidations.createCategoryValidationSchema),
     categoryController.createCategory,
   )
-  .get(auth(Role.PROVIDER), categoryController.getCategories);
+  .get(categoryController.getCategories);
 
 export const categoryRoutes = router;
