@@ -10,7 +10,11 @@ const router = Router();
 router.use(auth(Role.ADMIN));
 
 router.get('/users', adminController.getAllUsers);
-router.get('/users/:id', validateRequest(userValidations.userStatusUpdateSchema), adminController.updateUser);
+router.patch(
+  '/users/:id',
+  validateRequest(userValidations.userStatusUpdateSchema),
+  adminController.updateUser,
+);
 
 router.get('/gear', adminController.getAllGearListings);
 router.get('/rentals', adminController.getAllRentalOrders);
