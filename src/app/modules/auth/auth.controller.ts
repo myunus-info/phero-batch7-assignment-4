@@ -6,6 +6,8 @@ import { sendResponse } from '../../../utils/sendResponse';
 
 const registerUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const result = await authService.registerUserIntoDB(req.body);
+  console.log({ body: req.body });
+  console.log({ result });
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
@@ -16,7 +18,8 @@ const registerUser = catchAsync(async (req: Request, res: Response, next: NextFu
 });
 
 const loginUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const { accessToken, refreshToken } = await authService.loginUser(req.body);
+  const result = await authService.loginUser(req.body);
+  const { accessToken, refreshToken } = result;
 
   res.cookie('accessToken', accessToken, {
     httpOnly: true,

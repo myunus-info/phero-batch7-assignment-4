@@ -27,6 +27,7 @@ const registerUserIntoDB = async (payload: TRegisterUserInput) => {
     omit: { password: true },
     include: { providerProfile: payload.role === 'PROVIDER' },
   });
+  console.log({ newUser });
 
   return newUser;
 };
@@ -72,7 +73,7 @@ const loginUser = async (payload: ILoginUser) => {
 const getMeFromDB = async (id: string, role: string) => {
   const user = await prisma.user.findUnique({
     where: { id },
-    omit: { password: false },
+    omit: { password: true },
     include: {
       providerProfile: role === 'PROVIDER',
     },
