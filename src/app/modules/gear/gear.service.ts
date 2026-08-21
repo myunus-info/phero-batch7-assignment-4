@@ -5,7 +5,7 @@ import ApiError from '../../errors/ApiError';
 import httpStatus from 'http-status';
 
 const getAllGearsFromDB = async (query: IGearQuery) => {
-  const { category, brand, price, page = 1, limit = 5 } = query;
+  const { category, brand, price, page = 1, limit = 10 } = query;
 
   const where: GearItemWhereInput = {
     isActive: true,
