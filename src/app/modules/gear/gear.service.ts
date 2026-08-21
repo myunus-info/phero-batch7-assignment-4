@@ -1,12 +1,44 @@
 import { GearItemWhereInput } from './../../../../generated/prisma/models/GearItem';
+import { GearCondition } from './../../../../generated/prisma/enums';
 import { prisma } from '../../../lib/prisma';
 import { IGearQuery } from './gear.interface';
 import ApiError from '../../errors/ApiError';
 import httpStatus from 'http-status';
 
 const getAllGearsFromDB = async (query: IGearQuery) => {
-  const { search, category, brand, price, page = 1, limit = 10 } = query;
+  const { search, category, brand, price, condition, sortBy, sortOrder } = query;
+  const page = Number(query.page ?? 1);
+  const limit = Number(query.limit ?? 10);
+  const priceValue = price === undefined || price === null || price === '' ? undefined : Number(price);
+
+  if (!Number.isInteger(page) || page < 1 || !Number.isInteger(limit) || limit < 1) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Page and limit must be positive integers');
+  }
+
+  if (priceValue !== undefined && (!Number.isFinite(priceValue) || priceValue < 0)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Price must be a non-negative number');
+  }
+
+  const allowedSortFields = ['createdAt', 'name', 'pricePerDay'] as const;
+  const requestedSortBy = sortBy?.trim() || 'createdAt';
+  const requestedSortOrder = sortOrder?.trim().toLowerCase() || 'desc';
+
+  if (!allowedSortFields.includes(requestedSortBy as (typeof allowedSortFields)[number])) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid sort field');
+  }
+
+  if (requestedSortOrder !== 'asc' && requestedSortOrder !== 'desc') {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Sort order must be asc or desc');
+  }
+
   const searchTerm = search?.trim();
+  const categoryName = category?.trim();
+  const brandName = brand?.trim();
+  const conditionValue = condition?.trim().toUpperCase();
+
+  if (conditionValue && !Object.values(GearCondition).includes(conditionValue as GearCondition)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid gear condition');
+  }
 
   const where: GearItemWhereInput = {
     isActive: true,
@@ -20,9 +52,10 @@ const getAllGearsFromDB = async (query: IGearQuery) => {
           ],
         }
       : {}),
-    ...(category ? { category: { name: { equals: category, mode: 'insensitive' } } } : {}),
-    ...(brand ? { brand: { equals: brand, mode: 'insensitive' } } : {}),
-    ...(price ? { pricePerDay: { equals: price } } : {}),
+    ...(categoryName ? { category: { name: { equals: categoryName, mode: 'insensitive' } } } : {}),
+    ...(brandName ? { brand: { equals: brandName, mode: 'insensitive' } } : {}),
+    ...(conditionValue ? { condition: { equals: conditionValue as GearCondition } } : {}),
+    ...(priceValue !== undefined ? { pricePerDay: { equals: priceValue } } : {}),
   };
 
   const [items, total] = await Promise.all([
@@ -35,12 +68,10 @@ const getAllGearsFromDB = async (query: IGearQuery) => {
       },
       skip: (page - 1) * limit,
       take: limit,
-      orderBy: { createdAt: 'desc' },
+      orderBy: [{ [requestedSortBy]: requestedSortOrder }, { id: 'asc' }],
     }),
     prisma.gearItem.count({ where }),
   ]);
-
-  if (!items || items.length === 0) throw new ApiError(httpStatus.NOT_FOUND, 'No gear item found!');
 
   return {
     data: items,

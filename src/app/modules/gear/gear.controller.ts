@@ -6,7 +6,17 @@ import { gearService } from './gear.service';
 import pick from '../../../shared/shared';
 
 const getAllGears = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const filters = pick(req.query, ['search', 'category', 'price', 'brand', 'page', 'limit']);
+  const filters = pick(req.query, [
+    'search',
+    'category',
+    'price',
+    'brand',
+    'page',
+    'limit',
+    'condition',
+    'sortBy',
+    'sortOrder',
+  ]);
 
   const result = await gearService.getAllGearsFromDB(filters);
 

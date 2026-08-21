@@ -1,8 +1,11 @@
 export interface IGearQuery {
   search?: string;
   category?: string;
-  price?: number;
+  price?: number | string;
   brand?: string;
-  page?: number;
-  limit?: number;
+  page?: number | string;
+  limit?: number | string;
+  condition?: string;
+  sortBy?: string;
+  sortOrder?: string;
 }
