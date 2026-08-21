@@ -5,10 +5,21 @@ import ApiError from '../../errors/ApiError';
 import httpStatus from 'http-status';
 
 const getAllGearsFromDB = async (query: IGearQuery) => {
-  const { category, brand, price, page = 1, limit = 10 } = query;
+  const { search, category, brand, price, page = 1, limit = 10 } = query;
+  const searchTerm = search?.trim();
 
   const where: GearItemWhereInput = {
     isActive: true,
+    ...(searchTerm
+      ? {
+          OR: [
+            { name: { contains: searchTerm, mode: 'insensitive' } },
+            { description: { contains: searchTerm, mode: 'insensitive' } },
+            { brand: { contains: searchTerm, mode: 'insensitive' } },
+            { category: { name: { contains: searchTerm, mode: 'insensitive' } } },
+          ],
+        }
+      : {}),
     ...(category ? { category: { name: { equals: category, mode: 'insensitive' } } } : {}),
     ...(brand ? { brand: { equals: brand, mode: 'insensitive' } } : {}),
     ...(price ? { pricePerDay: { equals: price } } : {}),
