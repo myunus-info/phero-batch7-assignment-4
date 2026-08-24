@@ -5,7 +5,7 @@ import { Role } from '../../../../generated/prisma/enums';
 
 const router = Router();
 
-router.post('/', paymentController.confirmPayment);
+router.post('/confirm', paymentController.confirmPayment);
 
 router.use(auth(Role.CUSTOMER));
 
