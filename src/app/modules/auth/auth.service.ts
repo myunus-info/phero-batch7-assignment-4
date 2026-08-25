@@ -27,7 +27,6 @@ const registerUserIntoDB = async (payload: TRegisterUserInput) => {
     omit: { password: true },
     include: { providerProfile: payload.role === 'PROVIDER' },
   });
-  console.log({ newUser });
 
   return newUser;
 };

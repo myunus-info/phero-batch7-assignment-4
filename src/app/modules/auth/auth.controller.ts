@@ -6,8 +6,6 @@ import { sendResponse } from '../../../utils/sendResponse';
 
 const registerUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const result = await authService.registerUserIntoDB(req.body);
-  console.log({ body: req.body });
-  console.log({ result });
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
